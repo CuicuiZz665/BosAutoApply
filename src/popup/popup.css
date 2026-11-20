@@ -1,0 +1,388 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  width: 380px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  color: #1f2937;
+  background: #f3f4f6;
+}
+
+/* ---------- 头部 ---------- */
+
+header {
+  padding: 14px 16px;
+  background: linear-gradient(135deg, #00bea4 0%, #00a6f0 100%);
+  color: #fff;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+h1 {
+  font-size: 15px;
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ---------- 统计条 ---------- */
+
+.stats-bar {
+  display: flex;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 8px 0;
+}
+
+.stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.stat + .stat {
+  border-left: 1px solid #f3f4f6;
+}
+
+.stat-num {
+  font-size: 18px;
+  font-weight: 700;
+  color: #00a894;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* ---------- 主体 ---------- */
+
+main {
+  padding: 10px 12px 14px;
+}
+
+.hint {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  font-size: 12px;
+}
+
+.hint a {
+  color: #b45309;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---------- 卡片 ---------- */
+
+.card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 10px;
+}
+
+.card-body {
+  display: block;
+  padding-top: 4px;
+}
+
+/* 折叠分组标题 */
+details.card > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  user-select: none;
+}
+
+details.card > summary::-webkit-details-marker {
+  display: none;
+}
+
+details.card > summary::after {
+  content: "";
+  margin-left: auto;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid #9ca3af;
+  border-bottom: 2px solid #9ca3af;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+}
+
+details[open].card > summary::after {
+  transform: rotate(45deg);
+}
+
+details.card > summary .sum-icon {
+  font-size: 14px;
+}
+
+details.card > summary .sum-tip {
+  font-size: 11px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-left: 2px;
+}
+
+/* ---------- 表单 ---------- */
+
+.field {
+  margin-top: 10px;
+}
+
+.field:first-child {
+  margin-top: 0;
+}
+
+.field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 4px;
+}
+
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid #d1d5db;
+  border-radius: 7px;
+  font-size: 12px;
+  font-family: inherit;
+  color: #111827;
+  background: #fff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #00bea4;
+  box-shadow: 0 0 0 3px rgba(0, 190, 164, 0.15);
+}
+
+textarea {
+  resize: vertical;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.range-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.range-inputs input {
+  flex: 1;
+  min-width: 0;
+}
+
+.range-inputs .tilde {
+  color: #9ca3af;
+}
+
+.help {
+  margin: 5px 0 0;
+  font-size: 11px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+.warn-text {
+  color: #d97706;
+}
+
+/* ---------- 操作按钮 ---------- */
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.actions button {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.actions button:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+button.primary {
+  flex: 2;
+  background: linear-gradient(135deg, #00bea4, #00a894);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 190, 164, 0.35);
+}
+
+button.primary:disabled {
+  background: #cceee9;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+button.danger {
+  flex: 1;
+  background: #fff;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+}
+
+button.danger:disabled {
+  color: #d1d5db;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
+}
+
+/* ---------- 状态徽章 ---------- */
+
+.badge {
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.badge.idle {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.badge.running {
+  background: #fff;
+  color: #00a894;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.badge.stopped {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* ---------- 日志 ---------- */
+
+.status {
+  margin-top: 2px;
+}
+
+.log-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.log-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.mini-btn {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 9px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  color: #374151;
+  cursor: pointer;
+}
+
+.mini-btn:hover {
+  border-color: #00bea4;
+  color: #00a894;
+}
+
+.diagnose-result {
+  margin-top: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 10.5px;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 180px;
+  overflow-y: auto;
+  color: #111827;
+}
+
+.log-panel {
+  height: 150px;
+  overflow-y: auto;
+  background: #111827;
+  color: #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.log-line.error {
+  color: #f87171;
+}
+
+.log-line.warn {
+  color: #fbbf24;
+}
+
+.log-line.success {
+  color: #4ade80;
+}
+
+.notice {
+  font-size: 10.5px;
+  color: #9ca3af;
+  line-height: 1.6;
+  margin: 8px 2px 0;
+}

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>BOSS直聘自动投递助手</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <div class="header-row">
+      <h1>BOSS直聘自动投递助手</h1>
+      <span id="status-badge" class="badge idle">未运行</span>
+    </div>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <span class="stat-num" id="applied-count">0</span>
+      <span class="stat-label">已投递</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="skipped-count">0</span>
+      <span class="stat-label">已跳过</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num" id="error-count">0</span>
+      <span class="stat-label">异常</span>
+    </div>
+  </div>
+
+  <main>
+    <section id="not-on-page-hint" class="hint hidden">
+      ⚠️ 请先在浏览器中打开
+      <a href="https://www.zhipin.com/web/geek/job" target="_blank" rel="noopener">BOSS直聘职位搜索页</a>
+      并登录，再点击"开始投递"。
+    </section>
+
+    <!-- 核心区：常驻可见 -->
+    <form id="config-form">
+      <section class="card">
+        <div class="field">
+          <label for="keywords">岗位关键词</label>
+          <input type="text" id="keywords" placeholder="逗号分隔，逐个搜索，如：产品, B端产品" />
+          <p class="help">按顺序轮换搜索并投递；留空则直接使用当前页面列表</p>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="matchMode">匹配方式</label>
+            <select id="matchMode">
+              <option value="any">命中任意一个 · 广撒网</option>
+              <option value="all">必须全部包含 · 精准</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="start-btn" class="primary">▶&ensp;开始投递</button>
+          <button type="button" id="stop-btn" class="danger" disabled>停止</button>
+        </div>
+      </section>
+
+      <!-- 筛选条件：默认展开 -->
+      <details class="card" open>
+        <summary><span class="sum-icon">🎯</span>筛选条件<span class="sum-tip">留空 = 不限 / 保持页面设置</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="salaryMin">期望薪资 (K)</label>
+            <div class="range-inputs">
+              <input type="number" id="salaryMin" min="0" placeholder="下限 15" />
+              <span class="tilde">~</span>
+              <input type="number" id="salaryMax" min="0" placeholder="上限 30" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="districts">区域（区/县）</label>
+            <input type="text" id="districts" placeholder="如：海淀区, 朝阳区" />
+          </div>
+          <div class="field">
+            <label for="industries">行业</label>
+            <input type="text" id="industries" placeholder="如：互联网, 电子商务" />
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="companyScale">公司规模</label>
+              <input type="text" id="companyScale" placeholder="如：100-499人" />
+            </div>
+            <div class="field">
+              <label for="financeStage">融资阶段</label>
+              <input type="text" id="financeStage" placeholder="如：已上市" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="jobType">求职类型</label>
+              <select id="jobType">
+                <option value="">不限</option>
+                <option value="全职">全职</option>
+                <option value="兼职">兼职</option>
+                <option value="实习">实习</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="experience">工作经验</label>
+              <select id="experience">
+                <option value="">不限</option>
+                <option value="应届生">应届生</option>
+                <option value="1年以内">1年以内</option>
+                <option value="1-3年">1-3年</option>
+                <option value="3-5年">3-5年</option>
+                <option value="5-10年">5-10年</option>
+                <option value="10年以上">10年以上</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="degree">学历要求</label>
+            <select id="degree">
+              <option value="">不限</option>
+              <option value="初中及以下">初中及以下</option>
+              <option value="中专/中技">中专/中技</option>
+              <option value="高中">高中</option>
+              <option value="大专">大专</option>
+              <option value="本科">本科</option>
+              <option value="硕士">硕士</option>
+              <option value="博士">博士</option>
+            </select>
+          </div>
+        </div>
+      </details>
+
+      <!-- 排除条件：默认收起 -->
+      <details class="card">
+        <summary><span class="sum-icon">🚫</span>排除条件<span class="sum-tip">命中即跳过，含职位描述</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="excludeKeywords">排除关键词</label>
+            <input type="text" id="excludeKeywords" placeholder="如：外包, 销售, 食品" />
+          </div>
+          <div class="field">
+            <label for="excludeCompanies">排除公司</label>
+            <input type="text" id="excludeCompanies" placeholder="如：某某外包公司" />
+          </div>
+          <p class="help warn-text">排除词也会匹配职位描述，请避免过于宽泛的词</p>
+        </div>
+      </details>
+
+      <!-- 话术与节奏：默认收起 -->
+      <details class="card">
+        <summary><span class="sum-icon">💬</span>话术与节奏<span class="sum-tip">话术、上限、操作间隔</span></summary>
+        <div class="card-body">
+          <div class="field">
+            <label for="greeting">打招呼话术</label>
+            <textarea id="greeting" rows="3" placeholder="您好，我对这个岗位很感兴趣..."></textarea>
+            <p class="help">部分职位 Boss 会强制先发默认招呼语，自定义话术将作为第二条消息补发</p>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="maxApplications">最多投递数</label>
+              <input type="number" id="maxApplications" min="1" max="200" value="20" />
+            </div>
+            <div class="field">
+              <label>操作间隔 (秒)</label>
+              <div class="range-inputs">
+                <input type="number" id="minDelay" min="1" value="3" />
+                <span class="tilde">~</span>
+                <input type="number" id="maxDelay" min="1" value="8" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <section class="status">
+      <div class="log-title">
+        实时日志
+        <span class="log-actions">
+          <button type="button" id="clear-seen-btn" class="mini-btn" title="清空已投递/已跳过的职位记录，之后这些职位会被重新处理">🗑 清空记录</button>
+          <button type="button" id="diagnose-btn" class="mini-btn" title="检测 Boss 页面结构是否与插件选择器匹配，结果自动复制">📋 一键诊断</button>
+        </span>
+      </div>
+      <div id="log-panel" class="log-panel"></div>
+      <div id="diagnose-result" class="diagnose-result hidden"></div>
+      <p class="notice">自动化操作存在风控风险，请保持较长操作间隔、控制单次投递量。插件不会读取或上传你的账号、Cookie 等任何信息。</p>
+    </section>
+  </main>
+
+  <script src="popup.js"></script>
+</body>
+</html>
